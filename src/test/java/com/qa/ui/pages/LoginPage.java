@@ -8,7 +8,7 @@ public class LoginPage extends BasePage {
     // Locators
     private By usernameField = By.id("username");
     private By passwordField = By.id("password");
-    private By loginButton = By.id("loginButton");
+    private By loginButton = By.cssSelector("button[type='submit']");
     private By errorMessage = By.id("errorMessage");
     private By successMessage = By.id("successMessage");
     private By usernameError = By.id("usernameError");

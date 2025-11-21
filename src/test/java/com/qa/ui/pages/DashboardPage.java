@@ -45,7 +45,24 @@ public class DashboardPage extends BasePage {
     }
     
     public boolean isAdminPanelDisplayed() {
-        return isElementDisplayed(adminPanel);
+        try {
+            // Wait for the page to fully load and JavaScript to execute
+            Thread.sleep(2000);
+            
+            // Check if element exists
+            boolean exists = driver.findElements(adminPanel).size() > 0;
+            logger.info("Admin panel exists: {}", exists);
+            
+            if (exists) {
+                String display = driver.findElement(adminPanel).getCssValue("display");
+                logger.info("Admin panel display style: {}", display);
+                return !"none".equals(display);
+            }
+            return false;
+        } catch (Exception e) {
+            logger.error("Error checking admin panel: {}", e.getMessage());
+            return false;
+        }
     }
     
     public boolean isUserPanelDisplayed() {
@@ -77,6 +94,12 @@ public class DashboardPage extends BasePage {
     
     public boolean verifyAdminAccess() {
         waitForDashboardLoad();
+        // Wait a bit for JavaScript to update the admin panel visibility
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            logger.warn("Sleep interrupted", e);
+        }
         return isAdminPanelDisplayed();
     }
     

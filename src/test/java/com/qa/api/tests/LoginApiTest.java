@@ -64,6 +64,13 @@ public class LoginApiTest {
     public void testApiLoginWithInvalidCredentials() {
         logger.info("Iniciando teste: API Login inválido");
         
+        // Reset attempts first
+        String resetBody = String.format("{\"username\":\"%s\"}", Configuration.getInvalidUsername());
+        given().header("Content-Type", "application/json")
+            .body(resetBody)
+            .when()
+            .post("/api/reset-attempts");
+        
         String requestBody = String.format(
             "{\"username\":\"%s\", \"password\":\"%s\"}", 
             Configuration.getInvalidUsername(),

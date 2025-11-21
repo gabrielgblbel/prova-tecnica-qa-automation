@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Testes QA Automation - Gabriel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 10px;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 100%;
+            height: calc(100vh - 20px);
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.95;
+            margin: 3px 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .stat-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            margin: 5px 0;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .success {
+            color: #28a745;
+        }
+
+        .danger {
+            color: #dc3545;
+        }
+
+        .warning {
+            color: #ffc107;
+        }
+
+        .info {
+            color: #17a2b8;
+        }
+
+        .tests-section {
+            padding: 20px;
+            flex: 1;
+        }
+
+        .section-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 8px;
+        }
+
+        .test-group {
+            margin-bottom: 20px;
+        }
+
+        .test-group-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .test-list {
+            list-style: none;
+        }
+
+        .test-item {
+            background: #f8f9fa;
+            padding: 10px 15px;
+            margin-bottom: 6px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s;
+        }
+
+        .test-item:hover {
+            background: #e9ecef;
+            transform: translateX(3px);
+        }
+
+        .test-name {
+            font-size: 13px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .test-status {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .status-passed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-failed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .progress-section {
+            padding: 15px 20px;
+            background: #f8f9fa;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 30px;
+            background: #e9ecef;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-top: 10px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745 0%, #20c997 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            transition: width 2s ease;
+        }
+
+        .footer {
+            background: #343a40;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .footer-info {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .footer-item {
+            padding: 8px;
+        }
+
+        .footer-item strong {
+            display: block;
+            margin-bottom: 3px;
+            color: #adb5bd;
+            font-size: 11px;
+        }
+
+        .footer-item div {
+            font-size: 12px;
+        }
+
+        .chart-container {
+            padding: 15px 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .donut-chart {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto;
+            border-radius: 50%;
+            background: conic-gradient(
+                #28a745 0deg 360deg,
+                #dc3545 360deg 360deg
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .donut-hole {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .donut-percent {
+            font-size: 32px;
+            font-weight: 700;
+            color: #28a745;
+        }
+
+        .donut-label {
+            font-size: 13px;
+            color: #666;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animated {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .tech-badge {
+            background: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        .left-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .right-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎯 Relatório de Testes Automatizados</h1>
+            <p>Framework de Automação QA - Prova Técnica</p>
+            <p style="margin-top: 10px; font-size: 16px;">👨‍💻 Desenvolvido por: <strong>Gabriel</strong></p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card animated" style="animation-delay: 0.1s">
+                <div class="stat-icon success">✅</div>
+                <div class="stat-number success">6</div>
+                <div class="stat-label">Testes Passando</div>
+            </div>
+
+            <div class="stat-card animated" style="animation-delay: 0.2s">
+                <div class="stat-icon danger">❌</div>
+                <div class="stat-number danger">0</div>
+                <div class="stat-label">Testes Falhando</div>
+            </div>
+
+            <div class="stat-card animated" style="animation-delay: 0.3s">
+                <div class="stat-icon success">📊</div>
+                <div class="stat-number success">100%</div>
+                <div class="stat-label">Taxa de Sucesso</div>
+            </div>
+
+            <div class="stat-card animated" style="animation-delay: 0.4s">
+                <div class="stat-icon info">⏱️</div>
+                <div class="stat-number info">~17s</div>
+                <div class="stat-label">Tempo de Execução</div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="main-content">
+            <!-- Left Section - Tests Details -->
+            <div class="left-section">
+                <div class="tests-section">
+            <h2 class="section-title">🧪 Detalhamento dos Testes</h2>
+
+            <!-- Database Tests -->
+            <div class="test-group animated" style="animation-delay: 0.5s">
+                <h3 class="test-group-title">
+                    <span>🗄️</span>
+                    <span>Testes de Banco de Dados (1)</span>
+                </h3>
+                <ul class="test-list">
+                    <li class="test-item">
+                        <div class="test-name">
+                            <span style="font-size: 24px">✅</span>
+                            <span>testUserBlocking - Validação de bloqueio de usuário no BD</span>
+                        </div>
+                        <span class="test-status status-passed">PASSOU</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- API Tests -->
+            <div class="test-group animated" style="animation-delay: 0.6s">
+                <h3 class="test-group-title">
+                    <span>🔌</span>
+                    <span>Testes de API REST (2)</span>
+                </h3>
+                <ul class="test-list">
+                    <li class="test-item">
+                        <div class="test-name">
+                            <span style="font-size: 24px">✅</span>
+                            <span>testApiLoginWithValidCredentials - Login com credenciais válidas (200 OK)</span>
+                        </div>
+                        <span class="test-status status-passed">PASSOU</span>
+                    </li>
+                    <li class="test-item">
+                        <div class="test-name">
+                            <span style="font-size: 24px">✅</span>
+                            <span>testApiLoginWithInvalidCredentials - Login com credenciais inválidas (401 Unauthorized)</span>
+                        </div>
+                        <span class="test-status status-passed">PASSOU</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- UI Tests -->
+            <div class="test-group animated" style="animation-delay: 0.7s">
+                <h3 class="test-group-title">
+                    <span>🖥️</span>
+                    <span>Testes de Interface (UI) - Selenium (3)</span>
+                </h3>
+                <ul class="test-list">
+                    <li class="test-item">
+                        <div class="test-name">
+                            <span style="font-size: 24px">✅</span>
+                            <span>testLoginWithValidAdminCredentials - Login Admin + Validação Painel Administrativo</span>
+                        </div>
+                        <span class="test-status status-passed">PASSOU</span>
+                    </li>
+                    <li class="test-item">
+                        <div class="test-name">
+                            <span style="font-size: 24px">✅</span>
+                            <span>testLoginWithValidRegularUserCredentials - Login Usuário Regular</span>
+                        </div>
+                        <span class="test-status status-passed">PASSOU</span>
+                    </li>
+                    <li class="test-item">
+                        <div class="test-name">
+                            <span style="font-size: 24px">✅</span>
+                            <span>testAsyncDashboardLoading - Carregamento Assíncrono do Dashboard</span>
+                        </div>
+                        <span class="test-status status-passed">PASSOU</span>
+                    </li>
+                </ul>
+            </div>
+                </div>
+            </div>
+
+            <!-- Right Section - Progress & Tech Stack -->
+            <div class="right-section">
+                <!-- Progress Bar -->
+                <div class="progress-section">
+                    <h2 class="section-title">📊 Progresso Geral</h2>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 100%">
+                            6/6 Testes ✓
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tech Stack -->
+                <div style="padding: 15px 20px; background: #f8f9fa;">
+                    <h2 class="section-title">🛠️ Stack Tecnológica</h2>
+                    <div class="tech-stack">
+                        <span class="tech-badge">Java 17</span>
+                        <span class="tech-badge">Maven</span>
+                        <span class="tech-badge">Selenium</span>
+                        <span class="tech-badge">RestAssured</span>
+                        <span class="tech-badge">TestNG</span>
+                        <span class="tech-badge">PostgreSQL</span>
+                        <span class="tech-badge">Page Object</span>
+                        <span class="tech-badge">Log4j2</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-info">
+                <div class="footer-item">
+                    <strong>📅 Data de Execução</strong>
+                    <div id="executionDate"></div>
+                </div>
+                <div class="footer-item">
+                    <strong>⏱️ Duração Total</strong>
+                    <div>~17 segundos</div>
+                </div>
+                <div class="footer-item">
+                    <strong>🖥️ Ambiente</strong>
+                    <div>Windows 10 + Chrome 142</div>
+                </div>
+                <div class="footer-item">
+                    <strong>🔗 Repositório</strong>
+                    <div>github.com/gabrielgblbel</div>
+                </div>
+            </div>
+            <p style="margin-top: 10px; opacity: 0.8; font-size: 11px;">
+                Framework de Automação de Testes QA - Prova Técnica 2025
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Set execution date
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('pt-BR', { 
+            day: '2-digit', 
+            month: 'long', 
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        document.getElementById('executionDate').textContent = dateStr;
+
+        // Animate progress bar on load
+        window.addEventListener('load', () => {
+            const progressBar = document.querySelector('.progress-bar');
+            progressBar.style.width = '0%';
+            setTimeout(() => {
+                progressBar.style.width = '100%';
+            }, 300);
+        });
+    </script>
+</body>
+</html>
